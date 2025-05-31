@@ -7,6 +7,7 @@ export interface RegisterMutation {
 export interface User {
     _id: string;
     email: string;
+    role: string;
     displayName: string;
     token: string;
 }
@@ -30,4 +31,24 @@ export interface LoginMutation {
 
 export interface GlobalError {
     error: string;
+}
+
+export interface GroupMutation {
+    title: string;
+    image: string | null;
+    description: string;
+}
+
+export interface IGroup {
+    _id: string;
+    user: User;
+    title: string;
+    image: string | null;
+    description: string;
+    isPublished: boolean;
+    people:
+        {
+            user: User;
+            _id: string
+        }[]
 }
