@@ -1,10 +1,12 @@
-import {GlobalError, User, ValidationError} from "../../types";
+import {GlobalError, IGroup, User, ValidationError} from "../../types";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
 import {googleLogin, login, register} from "./UserThunks.ts";
+import {fetchUserGroups} from "../groups/groupsThunk.ts";
 
 interface UsersState {
     user: User | null;
+    userGroups: IGroup[] | null;
     registerLoading: boolean;
     registerError: ValidationError | null;
     loginLoading: boolean;
@@ -13,6 +15,7 @@ interface UsersState {
 
 const initialState: UsersState = {
     user: null,
+    userGroups: [],
     registerLoading: false,
     registerError: null,
     loginError: null,
@@ -24,6 +27,7 @@ export const selectRegisterLoading = (state: RootState) => state.users.registerL
 export const selectRegisterError = (state: RootState) => state.users.registerError;
 export const selectLoginLoading = (state: RootState) => state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
+export const selectUserGroups = (state: RootState) => state.users.userGroups;
 
 
 export const usersSlice = createSlice({
@@ -75,6 +79,10 @@ export const usersSlice = createSlice({
                 state.loginLoading = false;
                 state.loginError = error || null;
             })
+
+            builder.addCase(fetchUserGroups.fulfilled, (state, action) => {
+                state.userGroups = action.payload;
+            });
 
 
     }
